@@ -1,0 +1,39 @@
+<configuration>
+	<springProperty scope="context" name="springAppName" source="spring.application.name"/>
+	<springProperty scope="context" name="log.level" source="logging.level.root"/>
+	<property name="log.path" value="D://workspace-hengchang//SpringBootProject//logs" />
+	<!--日志文件存储天数-->
+	<property name="log.maxHistory" value="15"/>
+	<!--日志文件大小限制-->
+	<property name="log.maxFileSize" value="500MB"/>
+	<!--日志文件总大小限制-->
+	<property name="log.totalSizeCap" value="50GB"/>
+	<!--普通日志打印格式-->
+	<property name="log.pattern" value="%d{yyyy-MM-dd HH:mm:ss.SSS} | traceId=%X{traceId} | [%thread] %-5level %logger{50} - %msg%n" />
+	<!--输出到控制台-->
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${log.pattern}</pattern>
+		</encoder>
+	</appender>
+	<appender name="webLogAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.path}/project-web.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<MaxHistory>${log.maxHistory}</MaxHistory>
+			<totalSizeCap>${log.totalSizeCap}</totalSizeCap>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>${log.pattern}</pattern>
+		</layout>
+	</appender>
+	<logger name="org.apache.kafka.clients.consumer.internals" level="OFF"/>
+	<logger name="org.springframework.kafka.KafkaListenerEndpointContainer" level="OFF"/>
+
+	<logger name="owner.redis.demo" level="${log.level}" additivity="false">
+		<appender-ref ref="stdout" />
+		<appender-ref ref="webLogAppender" />
+	</logger>
+</configuration>

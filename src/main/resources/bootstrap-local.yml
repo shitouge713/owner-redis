@@ -1,0 +1,33 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: owner-redis-demo
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://10.100.19.122:3306/h_order?useUnicode=true&characterEncoding=UTF-8&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2b8&allowMultiQueries=true
+    username: devops
+    password: 12345678
+  redis:
+    cluster:
+      nodes: 10.180.3.13:6379
+      password: Oi8rVrBFjAZv
+      maxRediects: 10
+    timeout: 1000
+    database: 15
+    jedis:
+      pool:
+        max-wait: 30000
+        max-active: 200
+        max-idle: 8
+        min-idle: 2
+  task:
+    execution:
+      pool:
+        max-size: 8
+        core-size: 4
+        keep-alive: 60s
+        queue-capacity: 2048
+      thread-name-prefix: my-async-pool-
